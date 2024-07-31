@@ -23,12 +23,12 @@ Anonymous leverages the Tor network to provide a robust mechanism for maintainin
 - Tor
 
 ## Installation
-sudo git clone 
-
  **Install Python Packages**:
-   ```sh
+ ```sh
+ sudo git clone https://github.com/Hunter8309799/Anonymous.git
+   cd Anonymous
    pip install -r requirements.txt
    sudo apt update
    sudo apt install tor -y
 # Run the script :
-  sudo python3 anonymous.py
+  sudo python3 anonyms.py
