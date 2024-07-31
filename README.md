@@ -33,6 +33,5 @@ Before running the tool, ensure you have the required packages installed. You ca
   ```sh 
 sudo apt update
 sudo apt install tor -y
-Run the script :
-```python
+# Run the script :
 sudo python3 anonymous.py
