@@ -23,15 +23,12 @@ Anonymous leverages the Tor network to provide a robust mechanism for maintainin
 - Tor
 
 ## Installation
+sudo git clone 
 
-Before running the tool, ensure you have the required packages installed. You can install the necessary Python packages using the `requirements.txt` file.
-
-1. **Install Python Packages**:
+ **Install Python Packages**:
    ```sh
    pip install -r requirements.txt
-2. **Install System Packages:
-  ```sh 
-sudo apt update
-sudo apt install tor -y
+   sudo apt update
+   sudo apt install tor -y
 # Run the script :
-sudo python3 anonymous.py
+  sudo python3 anonymous.py
