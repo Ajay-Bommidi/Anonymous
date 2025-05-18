@@ -40,7 +40,7 @@ Dependencies: Python libraries (requests, stem for Tor control).
 
 Clone the Repository:
 ```
-git clone https://github.com/Ajay-Bommidi/Anonymous.git
+sudo git clone https://github.com/Ajay-Bommidi/Anonymous.git
 cd Anonymous
 ```
 
@@ -53,7 +53,7 @@ sudo apt install tor curl
 
 Set Up Python Environment:
 ```
-python3 -m venv venv
+sudo python3 -m venv venv
 source venv/bin/activate
 ```
 
