@@ -20,6 +20,7 @@ Comparison with tools like Tor Browser.
 
 Example Screenshot:
 
+![image](https://github.com/user-attachments/assets/c5a68a74-63b0-4381-b9b4-3a16a2099ae1)
 
 
 🛠️ Features
@@ -96,6 +97,8 @@ Run the Anonymous CLI:
 ```
 python3 Anonymous.py
 ```
+To Exit 
+ctrl+c
 
 Menu Options
 
