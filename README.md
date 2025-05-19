@@ -62,6 +62,29 @@ Install Python Dependencies:
 ```
 pip install -r requirements.txt
 ```
+install tor using 
+```
+sudo apt install tor -y
+sudo service tor status
+```
+```
+export http_proxy="socks5h://127.0.0.1:9050"
+export https_proxy="socks5h://127.0.0.1:9050"
+export all_proxy="socks5h://127.0.0.1:9050"
+source ~/.bashrc
+```
+or 
+```
+sudo nano /etc/tor/torrc
+ControlPort 9051
+CookieAuthentication 0
+sudo systemctl restart tor
+```
+
+Start Tor Services
+```
+sudo service tor start
+```
 
 Example requirements.txt:
 requests==2.28.1
