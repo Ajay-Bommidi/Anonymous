@@ -1,146 +1,152 @@
 # -*- coding: utf-8 -*-
-import time
 import os
 import subprocess
 import requests
 from requests.exceptions import RequestException
 import asyncio
 
+# Colored output
+def cprint(msg, color="green", prefix="[+]"):
+    colors = {
+        "red": "\033[91m",
+        "green": "\033[92m",
+        "yellow": "\033[93m",
+        "cyan": "\033[96m",
+        "reset": "\033[0m"
+    }
+    print(f"{colors.get(color, '')}{prefix} {msg}{colors['reset']}")
+
+def banner():
+    os.system("clear")
+    print("""
+\033[95m
+ 
+    ___                                                      
+   /   |  ____  ____  ____  __  ______ ___  ____  __  _______
+  / /| | / __ \/ __ \/ __ \/ / / / __ `__ \/ __ \/ / / / ___/
+ / ___ |/ / / / /_/ / / / / /_/ / / / / / / /_/ / /_/ (__  ) 
+/_/  |_/_/ /_/\____/_/ /_/\__, /_/ /_/ /_/\____/\__,_/____/  
+                         /____/                              
+                       
+ 
+ 
+ \033[0m
+                              \033[96m~ Anonymous.. | Be Anonymous Online ~\033[0m
+""")
+
 def check_sudo():
-    """Check if the script is running with sudo permissions."""
     if os.geteuid() != 0:
-        print("[!] This script requires root permissions. Please run with 'sudo'.")
+        cprint("This script requires root permissions. Please run with 'sudo'.", "red", "[!]")
         exit(1)
 
 def install_package(package_name):
-    """Install a system package if not already installed."""
     try:
-        subprocess.check_output(f'dpkg -s {package_name}', shell=True)
-        print(f'[+] {package_name} is already installed.')
+        subprocess.check_output(f'dpkg -s {package_name}', shell=True, stderr=subprocess.DEVNULL)
+        cprint(f"{package_name} is already installed.")
     except subprocess.CalledProcessError:
-        print(f'[+] {package_name} is not installed. Installing...')
+        cprint(f"{package_name} is not installed. Installing...", "yellow")
         try:
             subprocess.check_output('sudo apt update', shell=True, stderr=subprocess.DEVNULL)
             subprocess.check_output(f'sudo apt install {package_name} -y', shell=True, stderr=subprocess.DEVNULL)
-            print(f'[!] {package_name} installed successfully.')
+            cprint(f"{package_name} installed successfully.", "green", "[✔]")
         except subprocess.CalledProcessError as e:
-            print(f"[!] Failed to install {package_name}: {e}")
+            cprint(f"Failed to install {package_name}: {e}", "red", "[!]")
             exit(1)
 
 def install_python_package(package_name):
-    """Install a Python package if not already installed."""
     try:
-        subprocess.check_output(f'pip3 show {package_name}', shell=True)
-        print(f'[+] {package_name} is already installed.')
+        subprocess.check_output(f'pip3 show {package_name}', shell=True, stderr=subprocess.DEVNULL)
+        cprint(f"{package_name} is already installed.")
     except subprocess.CalledProcessError:
-        print(f'[+] {package_name} is not installed. Installing...')
-        try:
-            os.system(f'pip3 install {package_name} > /dev/null 2>&1')
-            print(f'[!] {package_name} installed successfully.')
-        except subprocess.CalledProcessError as e:
-            print(f"[!] Failed to install {package_name}: {e}")
-            exit(1)
+        cprint(f"{package_name} is not installed. Installing...", "yellow")
+        os.system(f'pip3 install {package_name} > /dev/null 2>&1')
+        cprint(f"{package_name} installed successfully.", "green", "[✔]")
 
 def setup_environment():
-    """Check and install required packages."""
     install_package('python3-pip')
     install_python_package('requests[socks]')
     install_package('tor')
 
 def check_proxy():
-    """Check if the SOCKS proxy is set to 127.0.0.1:9050."""
     try:
+        cprint("Checking SOCKS proxy on 127.0.0.1:9050...", "cyan")
         response = requests.get('https://api64.ipify.org?format=json', proxies={
             "http": "socks5h://127.0.0.1:9050",
             "https": "socks5h://127.0.0.1:9050"
         }, timeout=5)
         if response.status_code == 200:
-            print('[+] SOCKS proxy is correctly configured to 127.0.0.1:9050.')
+            cprint("SOCKS proxy is working and correctly configured.")
         else:
-            print("[!] SOCKS proxy is not correctly configured. Please ensure it is set to 127.0.0.1:9050.")
+            cprint("SOCKS proxy check failed.", "red", "[!]")
             exit(1)
     except RequestException:
-        print("[!] Unable to connect using SOCKS proxy. Please check your proxy settings.")
+        cprint("Unable to connect using SOCKS proxy. Check Tor status and proxy settings.", "red", "[!]")
         exit(1)
 
-def ma_ip():
-    """Retrieve the current external IP address."""
+def get_current_ip():
     url = 'https://api64.ipify.org?format=json'
     proxies = {
         "http": "socks5h://127.0.0.1:9050",
         "https": "socks5h://127.0.0.1:9050"
     }
     try:
-        response = requests.get(url, proxies=proxies)
+        response = requests.get(url, proxies=proxies, timeout=5)
         return response.json().get('ip', 'Error')
     except RequestException as e:
-        print(f"[!] Error retrieving IP: {e}")
+        cprint(f"Error retrieving IP: {e}", "red", "[!]")
         return "Error"
 
 async def change_ip():
-    """Reload Tor service and print the new IP address."""
-    print("[+] Reloading Tor service...")
+    cprint("Reloading Tor service for new identity...", "yellow")
     os.system("service tor reload")
-    await asyncio.sleep(10)  # Wait to ensure Tor has time to reload and apply changes
-    new_ip = ma_ip()
-    print(f'[+] Your IP has been changed to: {new_ip}')
+    await asyncio.sleep(10)
+    new_ip = get_current_ip()
+    cprint(f"Your new IP address: {new_ip}", "green", "[IP]")
     return new_ip
 
 def start_tor_service():
-    """Start the Tor service and check its status."""
-    print("[+] Starting Tor service...")
+    cprint("Starting Tor service...", "cyan")
     try:
-        subprocess.check_output('service tor start', shell=True, stderr=subprocess.STDOUT)
-        print('[+] Tor service started successfully.')
+        subprocess.check_output('service tor start', shell=True, stderr=subprocess.DEVNULL)
+        cprint("Tor service started successfully.", "green", "[✔]")
     except subprocess.CalledProcessError as e:
-        print(f"[!] Failed to start Tor service: {e.output.decode().strip()}")
-        print("[!] Please ensure that Tor is installed and configured correctly.")
+        cprint(f"Failed to start Tor service: {e.output.decode().strip()}", "red", "[!]")
         exit(1)
 
 async def run_tool(interval, times):
-    """Run the IP change tool for the specified number of times or indefinitely."""
     if times == 0:
+        count = 1
         while True:
             try:
+                cprint(f"[∞-{count}] Changing IP...", "cyan")
                 await asyncio.sleep(interval)
                 await change_ip()
+                count += 1
             except KeyboardInterrupt:
-                print('\nAuto TOR is closed.')
+                cprint("Anonymous.. is closing.", "yellow", "\n[EXIT]")
                 break
     else:
-        for _ in range(times):
+        for i in range(times):
+            cprint(f"[{i+1}/{times}] Changing IP...", "cyan")
             await asyncio.sleep(interval)
             await change_ip()
 
 def main():
-    """Main function to set up the environment and start the tool."""
     check_sudo()
     setup_environment()
-
-    os.system("clear")
-    print(''' 
-  _______     ______  ______ _____     _____ _____  ______ _____ _______ ____  _____  
- / ____\ \   / /  _ \|  ____|  __ \   / ____|  __ \|  ____/ ____|__   __/ __ \|  __ \ 
-| |     \ \_/ /| |_) | |__  | |__) | | (___ | |__) | |__ | |       | | | |  | | |__) |
-| |      \   / |  _ <|  __| |  _  /   \___ \|  ___/|  __|| |       | | | |  | |  _  / 
-| |____   | |  | |_) | |____| | \ \   ____) | |    | |___| |____   | | | |__| | | \ \ 
- \_____|  |_|  |____/|______|_|  \_\ |_____/|_|    |______\_____|  |_|  \____/|_|  \_\ [Ajay]
-''')
-    print("\n Be Anonymous online\n")
-    print("Make sure to configure your SOCKS proxy to 127.0.0.1:9050")
-    
-    check_proxy()
+    banner()
+    cprint("Tip: Set your browser or system proxy to 127.0.0.1:9050", "yellow", "[INFO]")
     start_tor_service()
+    check_proxy()
 
     try:
-        interval = int(input("[+] Time to change IP in seconds [type=60] >> ") or 60)
-        times = int(input("[+] How many times do you want to change your IP [type=1000] for infinite IP change type [0] >> ") or 1000)
-
-        loop = asyncio.get_event_loop()
-        loop.run_until_complete(run_tool(interval, times))
+        interval = int(input("\n[?] Interval in seconds between IP changes (default: 60): ") or 60)
+        times = int(input("[?] Number of IP changes (default: 1000, use 0 for infinite): ") or 1000)
+        cprint(f"Starting Anonymous.. with interval = {interval}s and count = {times}", "green", "[RUN]")
+        asyncio.run(run_tool(interval, times))
     except ValueError:
-        print("[!] Please enter valid numbers for time and iterations.")
+        cprint("Invalid input. Please enter numeric values.", "red", "[!]")
+        exit(1)
 
 if __name__ == "__main__":
     main()
-
