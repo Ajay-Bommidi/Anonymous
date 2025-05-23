@@ -1,5 +1,7 @@
 Anonymous
 Anonymous is a Python-powered cybersecurity tool inspired by cyber-thriller movies, designed to cloak your digital identity for educational purposes. As one of my first projects, it transforms you into a digital ghost, masking your online presence through IP anonymization and secure browsing. Evolved concepts from this project live on in my later work, like PassFort and ScanHammer.
+![image (2)](https://github.com/user-attachments/assets/96eb6468-d479-4f78-b3e8-a36e12027d94)
+
 🚀 Why Anonymous?
 In a world where every click leaves a trace, Anonymous empowers you to:
 
