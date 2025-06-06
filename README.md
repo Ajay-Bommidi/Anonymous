@@ -1,4 +1,4 @@
-Anonymous
+## Anonymous
 Anonymous is a Python-powered cybersecurity tool inspired by cyber-thriller movies, designed to cloak your digital identity for educational purposes. As one of my first projects, it transforms you into a digital ghost, masking your online presence through IP anonymization and secure browsing. Evolved concepts from this project live on in my later work, like PassFort and ScanHammer.
 ![image (2)](https://github.com/user-attachments/assets/96eb6468-d479-4f78-b3e8-a36e12027d94)
 
@@ -10,11 +10,7 @@ Learn Cybersecurity: Master tools like Tor and proxies through hands-on experime
 Showcase Skills: A portfolio gem highlighting Python, networking, and ethical hacking for recruiters.
 Channel Movie Magic: Live the Mr. Robot fantasy, ethically and safely.
 
-
 Disclaimer: For EDUCATIONAL USE ONLY. Unauthorized use to harm systems or networks is ILLEGAL and UNETHICAL. Always obtain permission for testing.
-
-📸 Showcase: Become a Digital Ghost
-Prove Anonymous works! Share screenshots or GIFs of:
 
 CLI masking your IP or routing through Tor.
 Anonymous browsing or Git commit results.
