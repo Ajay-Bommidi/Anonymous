@@ -52,6 +52,7 @@ sudo apt install tor curl
 
 Set Up Python Environment:
 ```
+sudo chown -R Kali:kali /home/kali/Anonymous/venev
 sudo python3 -m venv venv
 source venv/bin/activate
 ```
@@ -59,6 +60,7 @@ source venv/bin/activate
 
 Install Python Dependencies:
 ```
+
 pip install -r requirements.txt
 ```
 install tor using 
