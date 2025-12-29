@@ -149,13 +149,13 @@ Suggest GUI integration (like Strongify).
 This project is licensed under the MIT License. See the LICENSE file for details.
 📬 Contact
 
-# Author: Ajay Bommidi
+## Author: Ajay Bommidi
 
 GitHub: Ajay-Bommidi
 
 Email: ajaynaidu641@gmail.com
 
-# Linkedin : https://www.linkedin.com/in/ajay-bommidi-88b74b279
+## Linkedin : https://www.linkedin.com/in/ajay-bommidi-88b74b279
 
 
 ⭐ Star this repository to support my early cybersecurity adventures! Explore my evolved projects like PassFort and ScanHammer for more advanced tools.
